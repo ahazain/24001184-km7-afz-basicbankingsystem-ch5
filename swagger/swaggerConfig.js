@@ -15,7 +15,7 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ["./route/routes.js"], // pointing to your routes file
+  apis: ["./route/routesUser.js"], // pointing to your routes file
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
