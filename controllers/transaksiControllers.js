@@ -3,7 +3,7 @@ class transaksiControllers {
   static async showTransaksi(req, res) {
     try {
       const data = await transaksi.getTransaksi();
-      res.status(201).json(data);
+      res.status(200).json(data);
     } catch (error) {
       console.error("Error retrieving transactions:", error);
       res.status(500).json({ error: "error menampilkan transaksi" });
@@ -15,7 +15,7 @@ class transaksiControllers {
       if (!data) {
         return res.status(404).json({ error: "Transaction not found" });
       }
-      res.status(201).json(data);
+      res.status(200).json(data);
     } catch (error) {
       console.error("Error retrieving transaction:", error);
       res.status(500).json({ error: "Internal server error" });
@@ -34,7 +34,7 @@ class transaksiControllers {
         destinationAccountId,
         amount
       );
-      res.status(201).json({ message: "Transaksi berhasil", transaction });
+      res.status(200).json({ message: "Transaksi berhasil", transaction });
     } catch (error) {
       console.error("Error processing transaction:", error);
       res.status(500).json({ error: "Internal server error" });
@@ -56,7 +56,7 @@ class transaksiControllers {
       );
 
       res
-        .status(201)
+        .status(200)
         .json({ message: "Update transaksi berhasil", transaction });
     } catch (error) {
       console.error("Error processing transaction:", error);
@@ -70,7 +70,7 @@ class transaksiControllers {
         return res.status(404).json({ message: "Tidak ada Transaksi" });
       }
       res
-        .status(201)
+        .status(200)
         .json({ masssage: "berhasil hapus Transaksi", data: data });
     } catch (error) {
       console.error("Terjadi kesalahan pada server:", error);

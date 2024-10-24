@@ -7,7 +7,7 @@ class akunControllers {
       if (!data) {
         res.status(409).json({ mesage: "Daftar akun tidak ada" });
       }
-      res.status(201).json(data);
+      res.status(200).json(data);
     } catch (error) {
       res
         .status(500)
@@ -22,7 +22,7 @@ class akunControllers {
           message: "Data tidak ada",
         });
       }
-      res.status(201).json(data);
+      res.status(200).json(data);
     } catch (error) {
       res.status(500).json({
         message: "Terjadi kesalahan pada server",
@@ -34,7 +34,7 @@ class akunControllers {
   static async updateAccounts(req, res) {
     try {
       const data = await akun.putAkun(req.params.accountsId, req.body);
-      res.status(201).json({
+      res.status(200).json({
         message: "berhasil update akun",
         updateData: data,
       });
@@ -53,7 +53,7 @@ class akunControllers {
         return res.status(404).json({ error: "User tidak ada" });
       }
       const data = await akun.postAkun(req.body);
-      res.status(201).json({
+      res.status(200).json({
         message: "berhasil membuat akun",
         insertData: data,
       });
@@ -68,7 +68,7 @@ class akunControllers {
   static async destroyAccounts(req, res) {
     try {
       const data = await akun.deleteAkun(req.params.accountsId);
-      res.status(201).json({
+      res.status(200).json({
         mesage: "data berhasil dihapus",
         data: data,
       });
