@@ -45,6 +45,7 @@ class usersControlers {
       }
       const data = await users.postUsers(req.body);
       res.status(201).json({
+        status: 201,
         message: "Data user berhasil ditambahkan",
         insertData: data,
       });

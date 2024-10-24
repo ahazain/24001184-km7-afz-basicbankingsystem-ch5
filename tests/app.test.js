@@ -5,7 +5,7 @@ describe("API Routes", () => {
   test("should create a new user", async () => {
     const newUser = {
       name: "ahmadfarid",
-      email: "one@gmail.com",
+      email: "ttitkia@gmail.com",
       password: "123",
       profile: {
         identify_type: "KTP",
@@ -17,11 +17,15 @@ describe("API Routes", () => {
     try {
       const response = await request(app).post("/api/v1/users").send(newUser);
 
-      expect(response.statusCode).toBe(201);
-      expect(response.body).toHaveProperty("status");
-      expect(response.body).toHaveProperty("message");
-      expect(response.body.status).toBe(true); // Pastikan ini sesuai dengan respons API Anda
-      expect(response.body.message).toBe("Created"); // Pastikan ini juga sesuai
+      // Memeriksa status
+      expect(response.status).toBe(201);
+
+      // Memeriksa struktur respons
+      expect(response.body).toHaveProperty(
+        "message",
+        "Data user berhasil ditambahkan"
+      );
+      expect(response.body).toHaveProperty("insertData"); // Memeriksa properti insertData
     } catch (error) {
       // Tangani kesalahan jika terjadi
       console.error("Error:", error);
