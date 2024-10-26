@@ -15,7 +15,7 @@ app.use(bodyParser.json());
 // Swagger documentation route
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.use("/api/v1", routesAuth);
+app.use("/auth", routesAuth);
 // Main API routes
 app.use("/api/v1", routesUser);
 app.use("/api/v1", routesAkun);

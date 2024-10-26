@@ -27,6 +27,18 @@ class AuthControllers {
       });
     }
   }
+
+  static async showTransaksi(req, res) {
+    try {
+      const transactions = await AuthService.getTransaksi();
+      res.status(200).json({ status: 200, data: transactions });
+    } catch (error) {
+      const status = error.statusCode || 500;
+      res.status(status).json({
+        message: error.message || "Terjadi kesalahan pada server",
+      });
+    }
+  }
 }
 
 module.exports = AuthControllers;

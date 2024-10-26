@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const usersModels = require("../models/usersModels");
+const usersTransaksi = require("../models/transaksiModels");
 
 class AuthServis {
   static async register(data) {
@@ -35,6 +36,9 @@ class AuthServis {
     });
 
     return token;
+  }
+  static async getTransaksi() {
+    return await usersTransaksi.getTransaksi();
   }
 }
 
