@@ -13,9 +13,6 @@ class Users {
     });
   }
   static async postUsers(data) {
-    if (!data.name || !data.email || !data.password || !data.profile) {
-      throw new Error("Data yang diperlukan tidak lengkap");
-    }
     return await prisma.user.create({
       data: {
         name: data.name,
