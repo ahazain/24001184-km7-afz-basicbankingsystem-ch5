@@ -1,84 +1,60 @@
-const users = require("../models/usersModels");
+const usersServis = require("../services/usersServis");
 class usersControlers {
   static async showUsers(req, res) {
     try {
-      const data = await users.getUsers();
-      if (!data) {
-        return res.status(404).json({ message: "Daftar Users tidak ada" });
-      }
-      res.status(200).json(data);
+      const data = await usersServis.getAllusers(); // Memanggil service untuk mendapatkan data
+      res.status(200).json({
+        message: "Berhasil",
+        data: data,
+      });
     } catch (error) {
-      res.status(500).json({
-        message: "Terjadi kesalah pada server",
-        error: error.message,
+      const status = error.statusCode || 500;
+      res.status(status).json({
+        message: error.message || "Terjadi kesalahan pada server",
       });
     }
   }
   static async showUsersId(req, res) {
     try {
-      const data = await users.getUsersId(req.params.usersId);
-      if (!data) {
-        return res.status(404).json({
-          message: "Data tidak ada",
-        });
-      }
+      const data = await usersServis.getById(req.params.usersId);
       res.status(200).json(data);
     } catch (error) {
-      res.status(500).json({
-        message: "Terjadi kesalahan pada server",
-        error: error.message,
+      const status = error.statusCode || 500;
+      res.status(status).json({
+        message: error.message || "Terjadi kesalahan pada server",
       });
     }
   }
   static async createUsers(req, res) {
     try {
-      const { email } = req.body;
-      if (!email) {
-        return res.status(400).json({ message: "Email diperlukan" });
-      }
-      console.log("Body request:", req.body);
-      const cekEmail = await users.findUserByemail(email);
-      if (cekEmail) {
-        res
-          .status(409)
-          .json({ massage: "Gunakan email lain. Email sudah ada di database" });
-      }
-      const data = await users.postUsers(req.body);
+      const data = await usersServis.servisCreateUsers(req.body);
       res.status(201).json({
         status: 201,
         message: "Data user berhasil ditambahkan",
         insertData: data,
       });
     } catch (error) {
-      console.error("Error saat menambahkan user:", error);
-      res.status(500).json({
-        message: "data gagal ditambahkan",
-        error: error.message,
+      const status = error.statusCode || 500;
+      res.status(status).json({
+        message: error.message || "Terjadi kesalahan pada server",
       });
     }
   }
   static async updateUsers(req, res) {
     try {
-      const { email } = req.body;
       console.log("Body request:", req.body);
-
-      const cekEmail = await users.findUserByemail(email);
-      if (cekEmail) {
-        return res
-          .status(409)
-          .json({ message: "Gunakan email lain. Email sudah ada di database" });
-      }
-
-      const data = await users.putUsers(req.params.usersId, req.body);
+      const data = await usersServis.servisUpdateUser(
+        req.params.usersId,
+        req.body
+      );
       res.status(200).json({
         message: "Data user berhasil diupdate",
         updatedData: data,
       });
     } catch (error) {
-      console.error("Error saat merubah data user:", error);
-      res.status(500).json({
-        message: "Data gagal diupdate",
-        error: error.message,
+      const status = error.statusCode || 500;
+      res.status(status).json({
+        message: error.message || "Terjadi kesalahan pada server",
       });
     }
   }

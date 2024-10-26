@@ -1,0 +1,138 @@
+
+models
+
+const {PrismaClient} = require('@prisma/client');
+const { query } = require('express');
+const JSONBigInt = require('json-bigint');
+
+const prisma = new PrismaClient();
+
+exports.getAllCarSpecs = async (spec_name) => {
+    let orQuery = [];
+    if (spec_name) {
+        orQuery.push({
+            spec_name: {
+                contains: spec_name,
+                mode: 'insensitive'
+            }
+        })
+    }
+    if (orQuery.length > 0) {
+        query.where = {
+            ...query.where,
+            OR: orQuery
+        }
+    }
+
+    const searchedCarSpecs = await prisma.carspecs.findMany(query);
+    const serializedCarSpecs = JSONBigInt.stringify(searchedCarSpecs);
+    return JSONBigInt.parse(serializedCarSpecs);
+}
+
+exports.getCarSpecsById = async (id) => {
+    const repoCarSpecsId = await prisma.carspecs.findUnique({
+        where: {
+            id: id
+        }
+    });
+    const serializedCarSpecsId = JSONBigInt.stringify(repoCarSpecsId);
+    return JSONBigInt.parse(serializedCarSpecsId);
+}
+
+exports.createCarSpecs = async (carspecsBody) => {
+    const createNewCarSpecs = await prisma.carspecs.create({
+        data: carspecsBody
+    });
+    const serializedNewCarSpecs = JSONBigInt.stringify(createNewCarSpecs);
+    return JSONBigInt.parse(serializedNewCarSpecs);
+}
+
+exports.deleteCarSpecs = async (id) => {
+    const deleteCarSpecs = await prisma.carspecs.delete({
+        where: {
+            id: id
+        }
+    });
+    const serializedDeleteCarSpecs = JSONBigInt.stringify(deleteCarSpecs);
+    return JSONBigInt.parse(serializedDeleteCarSpecs);
+}
+
+exports.updateCarSpecs = async (id, carspecsBody) => {
+    const updateCarSpecs = await prisma.carspecs.update({
+        where: { id: id },
+        data: carspecsBody
+    });
+    const serializedUpdateCarSpecs = JSONBigInt.stringify(updateCarSpecs);
+    return JSONBigInt.parse(serializedUpdateCarSpecs);
+}
+
+///service
+
+const repoCarSpecs = require('../repositories/carspecsRepositories');
+const { NotFoundError } = require('../utils/request');
+const { imageUpload } = require('../utils/images-kit');
+
+exports.getAllCarSpecs = async (spec_name) => {
+    return repoCarSpecs.getAllCarSpecs(spec_name);
+}
+
+exports.getCarSpecsById = async (id) => {
+    const serviceCarSpecsId = await repoCarSpecs.getCarSpecsById(id);
+    if (!serviceCarSpecsId) {
+        throw new NotFoundError('Car specs not found');
+    }
+    return serviceCarSpecsId;
+} 
+
+exports.createCarSpecs = async (carspecsBody) => {
+    return repoCarSpecs.createCarSpecs(carspecsBody);
+}
+
+exports.deleteCarSpecs = async (id) => {
+    const serviceCarSpecsId = await repoCarSpecs.getCarSpecsById(id);
+    if (!serviceCarSpecsId) {
+        throw new NotFoundError('Car specs not found');
+    }
+    return repoCarSpecs.deleteCarSpecs(id);
+}
+
+exports.updateCarSpecs = async (id, carspecsBody) => {
+    const serviceCarSpecsId = await repoCarSpecs.getCarSpecsById(id);
+    if (!serviceCarSpecsId) {
+        throw new NotFoundError('Car specs not found');
+    }
+    return repoCarSpecs.updateCarSpecs(id, carspecsBody);
+}
+
+///controller
+
+const serviceCarSpecs = require('../services/carspecsServices');
+const { SuccessResponse } = require('../utils/response');
+const { NotFoundError } = require('../utils/request');
+
+exports.getAllCarSpecs = async (req, res, next) => {
+    const specs = await serviceCarSpecs.getAllCarSpecs(
+        req.query?.spec_name
+    );
+    SuccessResponse(res, specs);
+}
+
+exports.getCarSpecsById = async (req, res, next) => {
+    const specs = await serviceCarSpecs.getCarSpecsById(req.params.id);
+    SuccessResponse(res, specs);
+}
+
+exports.createCarSpecs = async (req, res, next) => {
+    const specs = await serviceCarSpecs.createCarSpecs(req.body);
+    SuccessResponse(res, specs, 201);
+}
+
+exports.deleteCarSpecs = async (req, res, next) => {
+    const specs = await serviceCarSpecs.deleteCarSpecs(req.params.id);
+    SuccessResponse(res, specs, 204);
+}
+
+exports.updateCarSpecs = async (req, res, next) => {
+    const specs = await serviceCarSpecs.updateCarSpecs(req.params.id, req.body);
+    SuccessResponse(res, specs, 200);
+}
