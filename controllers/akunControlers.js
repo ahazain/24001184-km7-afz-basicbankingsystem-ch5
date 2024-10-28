@@ -1,90 +1,83 @@
-const akun = require("../models/akunModels");
-const users = require("../models/usersModels");
-class akunControllers {
+const AkunServis = require("../services/akunServis");
+class AkunControllers {
   static async showAccounts(req, res) {
     try {
-      const data = await akun.getAkun();
-      if (!data) {
-        res.status(409).json({ mesage: "Daftar akun tidak ada" });
-      }
-      res.status(200).json(data);
+      const data = await AkunServis.getAllAkun();
+      res.status(200).json({
+        status: 200,
+        message: "berhasil menampilkan daftar akun",
+        data: data,
+      });
     } catch (error) {
+      const status = error.statusCode || 500;
       res
-        .status(500)
-        .json({ mesage: "terjadi kesalahan pada server", error: error.mesage });
+        .status(status)
+        .json({ message: error.message || "Terjadi Kesalahan pada server" });
     }
   }
   static async showAccountsId(req, res) {
     try {
-      const data = await akun.getAkunId(req.params.accountsId);
-      if (!data) {
-        return res.status(404).json({
-          message: "Data tidak ada",
-        });
-      }
-      res.status(200).json(data);
+      const data = await AkunServis.getById(req.params.accountsId);
+      res.status(200).json({
+        status: 200,
+        message: "berhasil menampilkan detail akun",
+        data: data,
+      });
     } catch (error) {
-      res.status(500).json({
-        message: "Terjadi kesalahan pada server",
-        error: error.message,
+      const status = error.statusCode || 500;
+      res.status(status).json({
+        message: error.message || "Terjadi kesalahan pada server",
       });
     }
   }
 
   static async updateAccounts(req, res) {
     try {
-      const data = await akun.putAkun(req.params.accountsId, req.body);
+      const data = await AkunServis.editAkun(req.params.accountsId, req.body);
       res.status(200).json({
+        status: 200,
         message: "berhasil update akun",
         updateData: data,
       });
     } catch (error) {
-      console.error("Error saat mnegupdate akun:", error);
-      res.status(500).json({
-        message: "akun gagal diupdate",
-        error: error.message,
+      const status = error.statusCode || 500;
+      res.status(status).json({
+        message: error.message || "Terjadi kesalahan pada server",
       });
     }
   }
   static async createAccounts(req, res) {
     try {
-      const user = await users.getUsersId(req.body.userId);
-      if (!user) {
-        return res.status(404).json({ error: "User tidak ada" });
-      }
-      const data = await akun.postAkun(req.body);
-      res.status(200).json({
+      const user = await AkunServis.createAkun(req.body);
+      res.status(201).json({
+        status: 201,
         message: "berhasil membuat akun",
-        insertData: data,
+        insertData: user,
       });
     } catch (error) {
-      console.error("Error saat menambahkan akun:", error);
-      res.status(500).json({
-        message: "akun gagal dibuat",
-        error: error.message,
+      const status = error.statusCode || 500;
+      res.status(status).json({
+        message: error.message || "Terjadi kesalahan pada server",
       });
     }
   }
   static async destroyAccounts(req, res) {
     try {
-      const data = await akun.deleteAkun(req.params.accountsId);
+      const data = await AkunServis.deleteAkunServis(req.params.accountsId);
       res.status(200).json({
-        mesage: "data berhasil dihapus",
+        status: 200,
+        message: "data berhasil dihapus",
         data: data,
       });
     } catch (error) {
-      if (error.code === "P2025") {
-        // Kode error Prisma untuk "Record to delete does not exist"
-        return res.status(404).json({
-          message: "Data tidak ada",
-        });
-      }
-      res.status(500).json({
-        message: "Terjadi kesalahan pada server",
-        error: error.message,
-      });
+      const status = error.statusCode || 500;
+      res
+        .status(status)
+        .json({ message: error.message || "Terjadi kesalahan pada server" });
     }
   }
 }
 
-module.exports = akunControllers;
+module.exports = AkunControllers;
+
+

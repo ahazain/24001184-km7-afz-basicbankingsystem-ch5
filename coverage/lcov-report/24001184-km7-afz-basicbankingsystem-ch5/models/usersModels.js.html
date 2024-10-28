@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/10</span>
+                <span class='fraction'>2/8</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
-                <span class="quiet">Branches</span>
+                <span class="quiet">Functions</span>
                 <span class='fraction'>0/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
-                <span class="quiet">Functions</span>
-                <span class='fraction'>2/6</span>
-            </div>
-        
-            
-            <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">25% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/10</span>
+                <span class='fraction'>2/8</span>
             </div>
         
             
@@ -126,26 +126,20 @@
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
 <a name='L63'></a><a href='#L63'>63</a>
-<a name='L64'></a><a href='#L64'>64</a>
-<a name='L65'></a><a href='#L65'>65</a>
-<a name='L66'></a><a href='#L66'>66</a>
-<a name='L67'></a><a href='#L67'>67</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<a name='L64'></a><a href='#L64'>64</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -197,22 +191,19 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const prisma = require("../prisma/client");
 class Users {
-  static async getUsers() {
-    return await prisma.user.findMany();
+<span class="fstat-no" title="function not covered" >  st</span>atic async getUsers() {
+<span class="cstat-no" title="statement not covered" >    return await prisma.user.findMany();</span>
   }
 <span class="fstat-no" title="function not covered" >  st</span>atic async findUserByemail(email) {
 <span class="cstat-no" title="statement not covered" >    return await prisma.user.findUnique({ where: { email: email } });</span>
   }
-  static async getUsersId(usersId) {
-    return await prisma.user.findUnique({
+<span class="fstat-no" title="function not covered" >  st</span>atic async getUsersId(usersId) {
+<span class="cstat-no" title="statement not covered" >    return await prisma.user.findUnique({</span>
       where: { id: parseInt(usersId) },
       include: { profile: true },
     });
   }
 <span class="fstat-no" title="function not covered" >  st</span>atic async postUsers(data) {
-<span class="cstat-no" title="statement not covered" >    if (!data.name || !data.email || !data.password || !data.profile) {</span>
-<span class="cstat-no" title="statement not covered" >      throw new Error("Data yang diperlukan tidak lengkap");</span>
-    }
 <span class="cstat-no" title="statement not covered" >    return await prisma.user.create({</span>
       data: {
         name: data.name,
@@ -220,9 +211,9 @@ class Users {
         password: data.password,
         profile: {
           create: {
-            identify_type: data.profile.identify_type, // Perbaiki akses ke data.profile
-            identify_number: data.profile.identify_number, // Perbaiki akses ke data.profile
-            address: data.profile.address, // Perbaiki akses ke data.profile
+            identify_type: data.profile.identify_type,
+            identify_number: data.profile.identify_number,
+            address: data.profile.address,
           },
         },
       },
@@ -268,7 +259,7 @@ module.exports = Users;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-25T03:37:44.186Z
+                at 2024-10-28T02:06:57.161Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

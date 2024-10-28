@@ -1,5 +1,5 @@
 const usersModels = require("../models/usersModels");
-class usersServis {
+class UsersServis {
   static async getAllusers() {
     const data = await usersModels.getUsers();
     if (!data || data.length === 0) {
@@ -12,7 +12,7 @@ class usersServis {
   static async getById(usersId) {
     const data = await usersModels.getUsersId(usersId);
     if (!data || data.length === 0) {
-      const error = new Error("Data user dan profil tidak ada");
+      const error = new Error("Data Detail User tidak ada");
       error.statusCode = 404;
       throw error;
     }
@@ -20,7 +20,6 @@ class usersServis {
   }
 
   static async servisCreateUsers(data) {
-    // Validasi data
     if (
       !data.name ||
       !data.email ||
@@ -34,7 +33,7 @@ class usersServis {
         !data.name &&
         !data.email &&
         !data.password &&
-        !data.profile &&
+        data.profile &&
         !data.profile.identify_number &&
         !data.profile.identify_type &&
         !data.profile.address
@@ -61,19 +60,16 @@ class usersServis {
         const error = new Error(
           `Data yang diperlukan tidak lengkap: ${missingFields.join(", ")}`
         );
-        error.statusCode = 400; // Bad Request
+        error.statusCode = 400;
         throw error;
       }
     }
-
-    // Cek apakah email sudah ada
-    const existingUser = await usersModels.findUserByemail;
+    const existingUser = await usersModels.findUserByemail(data.email);
     if (existingUser) {
-      const error = new Error("Email sudah terdaftar.");
-      error.statusCode = 400; // Bad Request
+      const error = new Error("Email sudah terdaftar");
+      error.statusCode = 400;
       throw error;
     }
-    // Jika semua validasi lulus, simpan ke database
     return await usersModels.postUsers(data);
   }
 
@@ -84,32 +80,20 @@ class usersServis {
       error.statusCode = 404;
       throw error;
     }
+
     if (
       !data.name ||
       !data.email ||
       !data.password ||
+      !data.profile ||
       !data.profile.identify_number ||
       !data.profile.identify_type ||
       !data.profile.address
     ) {
-      if (
-        !data.name &&
-        !data.email &&
-        !data.password &&
-        !data.profile.identify_number &&
-        !data.profile.identify_type &&
-        !data.profile.address
-      ) {
-        const error = new Error("Mohon isi semua data yang ada");
-        error.statusCode = 400;
-        throw error;
-      }
-
       const missingFields = [];
       if (!data.name) missingFields.push("name");
       if (!data.email) missingFields.push("email");
       if (!data.password) missingFields.push("password");
-
       if (!data.profile) {
         missingFields.push("profile");
       } else {
@@ -120,26 +104,33 @@ class usersServis {
         if (!data.profile.address) missingFields.push("alamat profil");
       }
 
-      // Jika ada field yang hilang, lemparkan error
       if (missingFields.length > 0) {
         const error = new Error(
           `Data yang diperlukan tidak lengkap: ${missingFields.join(", ")}`
         );
-        error.statusCode = 400; // Bad Request
+        error.statusCode = 404;
         throw error;
       }
-
-      // Cek apakah email sudah ada
-      const existingUser = await usersModels.findUserByemail;
-      if (existingUser) {
-        const error = new Error("Email sudah terdaftar.");
-        error.statusCode = 400; // Bad Request
-        throw error;
-      }
-      // Jika semua validasi lulus, simpan ke database
-      return await usersModels.postUsers(data);
     }
+
+    const existingUser = await usersModels.findUserByemail(data.email);
+    if (existingUser && existingUser.id !== usersId) {
+      const error = new Error("Email sudah terdaftar");
+      error.statusCode = 400;
+      throw error;
+    }
+
+    return await usersModels.putUsers(usersId, data);
+  }
+  static async deleteUser(usersId) {
+    const data = await usersModels.getUsersId(usersId);
+    if (!data) {
+      const error = new Error("Data user tidak ada");
+      error.statusCode = 404;
+      throw error;
+    }
+    return await usersModels.daleteUsers(usersId);
   }
 }
 
-module.exports = usersServis;
+module.exports = UsersServis;

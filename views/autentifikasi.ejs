@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daftar User</title>
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+      }
+      th,
+      td {
+        padding: 12px;
+        border: 1px solid #2a2929;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Daftar User</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nama</th>
+          <th>Email</th>
+          <th>Password</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (user.length > 0) { %> <% user.forEach(function(user) { %>
+        <tr>
+          <td><%= user.id %></td>
+          <td><%= user.name %></td>
+          <td><%= user.email %></td>
+          <td><%= user.password %></td>
+        </tr>
+        <% }); %> <% } else { %>
+        <tr>
+          <td colspan="4" class="no-data">Tidak ada user yang ditemukan.</td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </body>
+</html>

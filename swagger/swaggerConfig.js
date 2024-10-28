@@ -10,12 +10,26 @@ const swaggerOptions = {
     },
     servers: [
       {
-        url: "http://localhost:3000/api/v1",
+        url: "http://localhost:3000/",
         description: "Development server",
       },
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
   },
-  apis: ["./routes/routesUser.js"],
+  apis: [
+    "./routes/routesUser.js",
+    "./routes/routesAkun.js",
+    "./routes/routesTransaksi.js",
+    "./routes/routesAuth.js",
+  ],
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);

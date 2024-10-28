@@ -1,81 +1,71 @@
-const transaksi = require("../models/transaksiModels");
-class transaksiControllers {
+const transaksi = require("../services/transaksiServis");
+class TransaksiControllers {
   static async showTransaksi(req, res) {
     try {
-      const data = await transaksi.getTransaksi();
-      res.status(200).json(data);
+      const data = await transaksi.getAll();
+      res.status(200).json({
+        status: 200,
+        message: "berhasil menampilkan daftar transaksi",
+        insertData: data,
+      });
     } catch (error) {
-      console.error("Error retrieving transactions:", error);
-      res.status(500).json({ error: "error menampilkan transaksi" });
+      const status = error.statusCode || 500;
+      res.status(status).json({
+        message: error.message || "Terjadi kesalahan pada server",
+      });
     }
   }
+
   static async showTransaksiId(req, res) {
     try {
-      const data = await transaksi.getTransaksiId(req.params.transactionId);
-      if (!data) {
-        return res.status(404).json({ error: "Transaction not found" });
-      }
-      res.status(200).json(data);
+      const data = await transaksi.getById(req.params.transactionId);
+      res.status(200).json({
+        status: 200,
+        message: "berhasil menampilkan detail transaksi",
+        data: data,
+      });
     } catch (error) {
-      console.error("Error retrieving transaction:", error);
-      res.status(500).json({ error: "Internal server error" });
+      const status = error.statusCode || 500;
+      res.status(status).json({
+        message: error.message || "Terjadi kesalahan pada server",
+      });
     }
   }
   static async createTransaksi(req, res) {
     const { sourceAccountId, destinationAccountId, amount } = req.body;
 
     try {
-      if (!sourceAccountId || !destinationAccountId || amount <= 0) {
-        return res.status(400).json({ error: "masukkan amount yang benar" });
-      }
-
-      const transaction = await transaksi.postTransaction(
+      const transaction = await transaksi.createTransaksi(
         sourceAccountId,
         destinationAccountId,
         amount
       );
-      res.status(200).json({ message: "Transaksi berhasil", transaction });
+      res.status(201).json({
+        status: 201,
+        message: "Transaksi berhasil",
+        transaksi: transaction,
+      });
     } catch (error) {
-      console.error("Error processing transaction:", error);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  }
-  static async updateTransaksi(req, res) {
-    const { sourceAccountId, destinationAccountId, amount } = req.body;
-
-    try {
-      if (!sourceAccountId || !destinationAccountId || amount <= 0) {
-        return res.status(400).json({ error: "Invalid request body" });
-      }
-
-      const transaction = await transaksi.putTransaction(
-        req.params.transactionId,
-        sourceAccountId,
-        destinationAccountId,
-        amount
-      );
-
-      res
-        .status(200)
-        .json({ message: "Update transaksi berhasil", transaction });
-    } catch (error) {
-      console.error("Error processing transaction:", error);
-      res.status(500).json({ error: "Internal server error" });
+      const status = error.statusCode || 500;
+      res.status(status).json({
+        message: error.message || "Terjadi kesalahan pada server",
+      });
     }
   }
   static async destroyTransaksi(req, res) {
     try {
       const data = await transaksi.deleteTransaksi(req.params.transactionId);
-      if (!data) {
-        return res.status(404).json({ message: "Tidak ada Transaksi" });
-      }
-      res
-        .status(200)
-        .json({ masssage: "berhasil hapus Transaksi", data: data });
+      res.status(200).json({
+        status: 200,
+        message: "berhasil hapus Transaksi",
+        data: data,
+      });
     } catch (error) {
-      console.error("Terjadi kesalahan pada server:", error);
-      res.status(500).json({ error: "Terjadi kesalah pada server" });
+      const status = error.statusCode || 500;
+      res.status(status).json({
+        message: error.message || "Terjadi kesalahan pada server",
+      });
     }
   }
 }
-module.exports = transaksiControllers;
+module.exports = TransaksiControllers;
