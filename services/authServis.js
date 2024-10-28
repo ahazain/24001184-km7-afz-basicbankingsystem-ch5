@@ -1,45 +1,65 @@
-const bcrypt = require("bcryptjs");
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const usersModels = require("../models/usersModels");
 const usersTransaksi = require("../models/transaksiModels");
+const config = require("../configs/config");
 
-class AuthServis {
+class AuthService {
   static async register(data) {
-    const { email, password, ...rest } = data;
+    const { name, email, password, profile } = data;
+
+    if (
+      !profile ||
+      !profile.identify_type ||
+      !profile.identify_number ||
+      !profile.address
+    ) {
+      const error = new Error("Profile information is incomplete.");
+      error.statusCode = 400;
+      throw error;
+    }
+
     const existingUser = await usersModels.findUserByemail(email);
     if (existingUser) {
       const error = new Error("Email sudah terdaftar");
       error.statusCode = 409;
       throw error;
     }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     return await usersModels.postUsers({
-      ...rest,
+      name,
       email,
       password: hashedPassword,
+      profile: {
+        identify_type: profile.identify_type,
+        identify_number: profile.identify_number,
+        address: profile.address,
+      },
     });
   }
-
   static async login(email, password) {
-    const user = await usersModels.findUserByemail(email); // perbaiki nama metode
+    const user = await usersModels.findUserByemail(email);
+
     if (!user) {
-      const error = new Error("Email atau password salah");
+      const error = new Error("Email or password is wrong");
       error.statusCode = 401;
       throw error;
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
-    if (!validPassword) throw new Error("Email atau password salah");
+    if (!validPassword) {
+      const error = new Error("Email or password is wrong");
+      error.statusCode = 401;
+      throw error;
+    }
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ userId: user.id }, config.JWT_SECRET, {
       expiresIn: "1h",
     });
 
-    return token;
-  }
-  static async getTransaksi() {
-    return await usersTransaksi.getTransaksi();
+    return { token, user: { id: user.id, email: user.email } };
   }
 }
 
-module.exports = AuthServis;
+module.exports = AuthService;

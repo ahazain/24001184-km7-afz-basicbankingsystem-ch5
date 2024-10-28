@@ -1,10 +1,11 @@
 const usersServis = require("../services/usersServis");
-class usersControlers {
+class UsersControlers {
   static async showUsers(req, res) {
     try {
-      const data = await usersServis.getAllusers(); // Memanggil service untuk mendapatkan data
+      const data = await usersServis.getAllusers();
       res.status(200).json({
-        message: "Berhasil",
+        status: 200,
+        message: "Berhasil menampilkan daftar user",
         data: data,
       });
     } catch (error) {
@@ -17,7 +18,11 @@ class usersControlers {
   static async showUsersId(req, res) {
     try {
       const data = await usersServis.getById(req.params.usersId);
-      res.status(200).json(data);
+      res.status(200).json({
+        status: 200,
+        message: "berhasil menampilkan detail user",
+        data: data,
+      });
     } catch (error) {
       const status = error.statusCode || 500;
       res.status(status).json({
@@ -41,15 +46,17 @@ class usersControlers {
     }
   }
   static async updateUsers(req, res) {
+    console.log("Body request:", req.body);
     try {
-      console.log("Body request:", req.body);
       const data = await usersServis.servisUpdateUser(
         req.params.usersId,
-        req.body
+        req.body,
+        { new: true }
       );
       res.status(200).json({
+        status: 200,
         message: "Data user berhasil diupdate",
-        updatedData: data,
+        updateUsers: data,
       });
     } catch (error) {
       const status = error.statusCode || 500;
@@ -60,22 +67,17 @@ class usersControlers {
   }
   static async destroyUsers(req, res) {
     try {
-      const data = await users.getUsersId(req.params.usersId);
-      if (!data) {
-        return res.status(404).json({
-          message: "Data tidak ada",
-        });
-      }
+      const data = await usersServis.deleteUser(req.params.usersId);
       res
         .status(200)
-        .json({ message: "data berhasil dihapus", insertData: data });
+        .json({ status: 200, message: "data berhasil dihapus", data: data });
     } catch (error) {
-      res.status(500).json({
-        message: "Terjadi kesalahan pada server",
-        error: error.message,
+      const status = error.statusCode || 500;
+      res.status(status).json({
+        message: error.message || "Terjadi kesalahan pada server",
       });
     }
   }
 }
 
-module.exports = usersControlers;
+module.exports = UsersControlers;

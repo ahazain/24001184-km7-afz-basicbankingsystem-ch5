@@ -34,9 +34,9 @@ model BankAccount {
 
 model Transaction {
   id                   Int           @id @default(autoincrement())
-  sourceAccount        BankAccount   @relation("sourceAccount", fields: [sourceAccountId], references: [id])
+  sourceAccount        BankAccount   @relation("sourceAccount", fields: [sourceAccountId], references: [id], onDelete: Cascade)
   sourceAccountId      Int
-  destinationAccount   BankAccount   @relation("destinationAccount", fields: [destinationAccountId], references: [id])
+  destinationAccount   BankAccount   @relation("destinationAccount", fields: [destinationAccountId], references: [id], onDelete: Cascade)
   destinationAccountId Int
   amount               Float
 }

@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for 24001184-km7-afz-basicbankingsystem-ch5/routes/routesTransaksi.js</title>
+    <title>Code coverage report for 24001184-km7-afz-basicbankingsystem-ch5/routes/routesAuth.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../prettify.css" />
     <link rel="stylesheet" href="../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">24001184-km7-afz-basicbankingsystem-ch5/routes</a> routesTransaksi.js</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">24001184-km7-afz-basicbankingsystem-ch5/routes</a> routesAuth.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>8/8</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>8/8</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -75,31 +75,46 @@
 <a name='L10'></a><a href='#L10'>10</a>
 <a name='L11'></a><a href='#L11'>11</a>
 <a name='L12'></a><a href='#L12'>12</a>
-<a name='L13'></a><a href='#L13'>13</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const express = require("express");
 const router = express.Router();
-const transaksi = require("../controllers/transaksiControllers");
+const authController = require("../controllers/authControllers");
+const authenticateToken = require("../middlewares/authMiddleware");
 &nbsp;
-//route transaksi
-router.get("/transactions", transaksi.showTransaksi);
-router.get("/transactions/:transactionId", transaksi.showTransaksiId);
-router.post("/:transactions", transaksi.createTransaksi);
-router.delete("/transactions/:transactionId", transaksi.destroyTransaksi);
+// Route untuk render halaman registrasi
+router.get("/register", authController.renderRegister);
+router.post("/register", authController.register);
+&nbsp;
+// Route untuk render halaman login
+router.get("/login", authController.renderLogin);
+router.post("/login", authController.login);
+&nbsp;
+// Route untuk render dashboard setelah login berhasil
+router.get("/authentication", authenticateToken, authController.showTransaksi);
 &nbsp;
 module.exports = router;
-&nbsp;
-// router.put("/transactions/:transactionId", transaksi.updateTransaksi);</pre></td></tr></table></pre>
+&nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->

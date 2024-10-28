@@ -1,0 +1,43 @@
+<form action="/auth/register" method="post">
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required />
+  </div>
+  <div>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required />
+  </div>
+  <div>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required />
+  </div>
+  <div>
+    <label for="identify_type">Tipe Identitas:</label>
+    <input
+      type="text"
+      id="identify_type"
+      name="profile.identify_type"
+      required
+    />
+  </div>
+  <div>
+    <label for="identify_number">Nomor Identitas:</label>
+    <input
+      type="text"
+      id="identify_number"
+      name="profile.identify_number"
+      required
+    />
+  </div>
+  <div>
+    <label for="address">Alamat:</label>
+    <input type="text" id="address" name="profile.address" required />
+  </div>
+  <input type="submit" value="Register" />
+</form>
+
+<% if (success) { %>
+<div class="alert alert-success"><%= success %></div>
+<% } %> <% if (error) { %>
+<div class="alert alert-danger"><%= error %></div>
+<% } %>

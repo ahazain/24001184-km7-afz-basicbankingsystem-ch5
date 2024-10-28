@@ -20,9 +20,9 @@ class Users {
         password: data.password,
         profile: {
           create: {
-            identify_type: data.profile.identify_type, // Perbaiki akses ke data.profile
-            identify_number: data.profile.identify_number, // Perbaiki akses ke data.profile
-            address: data.profile.address, // Perbaiki akses ke data.profile
+            identify_type: data.profile.identify_type,
+            identify_number: data.profile.identify_number,
+            address: data.profile.address,
           },
         },
       },
