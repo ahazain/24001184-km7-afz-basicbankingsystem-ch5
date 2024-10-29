@@ -6,19 +6,35 @@ function authenticateToken(req, res, next) {
 
   if (!token) {
     console.log("Token tidak ditemukan, arahkan ke /auth/login");
-    return res.redirect("/auth/login");
+    if (
+      req.is("application/json") ||
+      req.headers["accept"] === "application/json"
+    ) {
+      return res.status(401).json({
+        message: "Tidak terautentikasi, token tidak ditemukan",
+      });
+    } else {
+      return res.redirect("/auth/login");
+    }
   }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
       console.log("Token tidak valid:", err);
-      return res.redirect("/auth/login");
+      if (
+        req.is("application/json") ||
+        req.headers["accept"] === "application/json"
+      ) {
+        return res.status(401).json({
+          message: "Tidak terautentikasi, token tidak valid",
+        });
+      } else {
+        return res.redirect("/auth/login");
+      }
     }
-    req.user = user; 
+    req.user = user;
     next();
   });
 }
-
-module.exports = authenticateToken;
 
 module.exports = authenticateToken;

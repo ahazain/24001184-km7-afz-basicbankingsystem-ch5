@@ -1,1 +1,1 @@
-jalankan testing mulai dari user, akun, transaksi, auth
+jalankan testing dengan urut mulai dari user, akun, transaksi, auth

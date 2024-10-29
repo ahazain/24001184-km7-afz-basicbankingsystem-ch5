@@ -8,11 +8,23 @@ class AuthController {
   static async autentifikasi(req, res) {
     try {
       const user = await data.getUsers();
-      res.render("autentifikasi", { user });
+      if (req.is("application/json")) {
+        return res.status(200).json({
+          message: "Menampilkan halaman daftar user",
+          status: 200,
+          data: user,
+        });
+      }
+      return res.render("autentifikasi", { user });
     } catch (error) {
-      res.status(error.statusCode || 500).json({
-        message: error.message || "Terjadi kesalahan pada server",
-      });
+      const status = error.statusCode || 500;
+      if (req.is("application/json")) {
+        return res.status(status).json({
+          message: error.message || "Terjadi kesalahan pada server",
+        });
+      } else {
+        return res.redirect("/auth/login");
+      }
     }
   }
 
@@ -64,9 +76,7 @@ class AuthController {
       const { token, user } = await AuthService.login(email, password);
 
       if (req.is("application/json")) {
-        return res
-          .status(200)
-          .json({ message: "Login sukses", token, user });
+        return res.status(200).json({ message: "Login sukses", token, user });
       } else {
         req.session.token = token;
         console.log("Token tersimpan di session:", req.session.token);
