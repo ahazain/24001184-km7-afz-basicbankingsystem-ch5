@@ -142,7 +142,7 @@ router.post("/login", authController.login);
  *     summary: Menampilkan semua user
  *     tags: [Authentication]
  *     security:
- *       - bearerAuth: []  # Menggunakan token JWT untuk otentikasi
+ *       - bearerAuth: []   
  *     responses:
  *       200:
  *         description: Menampilkan halaman daftar user

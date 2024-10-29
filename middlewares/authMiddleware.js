@@ -3,8 +3,8 @@ const jwt = require("jsonwebtoken");
 function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"];
   const token = authHeader ? authHeader.split(" ")[1] : req.session.token;
-
-  if (!token) {
+  
+  if (!token) { 
     console.log("Token tidak ditemukan, arahkan ke /auth/login");
     if (
       req.is("application/json") ||
