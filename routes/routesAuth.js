@@ -139,13 +139,13 @@ router.post("/login", authController.login);
  * @swagger
  * /auth/authentication:
  *   get:
- *     summary: Menampilkan semua transaksi
+ *     summary: Menampilkan semua user
  *     tags: [Authentication]
  *     security:
  *       - bearerAuth: []  # Menggunakan token JWT untuk otentikasi
  *     responses:
  *       200:
- *         description: Menampilkan halaman transaksi dengan daftar transaksi
+ *         description: Menampilkan halaman daftar user
  *         content:
  *           text/html:
  *             schema:

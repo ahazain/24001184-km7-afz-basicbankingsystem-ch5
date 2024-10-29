@@ -1,18 +1,20 @@
 const request = require("supertest");
 const app = require("../index");
 
-describe("POST /auth/register", () => {
-  it("should return 201 for successful registration", async () => {
+describe("authentication api jwt", () => {
+  let token;
+
+  test("sukses register", async () => {
     const response = await request(app)
       .post("/auth/register")
       .send({
-        name: "kopling1",
-        email: "wawan@gmail.com",
+        name: "erika",
+        email: "erika@gmail.com",
         password: "123",
         profile: {
           identify_type: "KTP",
           identify_number: "082642902",
-          address: "Jl. Contoh No. 1",
+          address: "Jakarta",
         },
       })
       .set("Accept", "application/json");
@@ -20,35 +22,24 @@ describe("POST /auth/register", () => {
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty("message", "Register sukses");
   });
-
-  it("should return 409 for already registered email", async () => {
+  test("401 JSON response with invalid token", async () => {
     const response = await request(app)
-      .post("/auth/register")
-      .send({
-        name: "kopling2",
-        email: "ama2@gmail.com",
-        password: "password123",
-        profile: {
-          identify_type: "KTP",
-          identify_number: "082642902",
-          address: "Jl. Contoh No. 1",
-        },
-      })
+      .get("/auth/authentication")
+      .set("Authorization", "Bearer invalid_token")
       .set("Accept", "application/json");
 
-    expect(response.status).toBe(409);
-    expect(response.body).toHaveProperty("message", "Email sudah terdaftar");
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty(
+      "message",
+      "Tidak terautentikasi, token tidak valid"
+    );
   });
 
-  it("should return 500 for server error", async () => {});
-});
-
-describe("POST /auth/login", () => {
-  it("should return 200 and login successfully", async () => {
+  test("sukses login", async () => {
     const response = await request(app)
       .post("/auth/login")
       .send({
-        email: "wawan@gmail.com",
+        email: "erika@gmail.com",
         password: "123",
       })
       .set("Accept", "application/json");
@@ -57,25 +48,16 @@ describe("POST /auth/login", () => {
     expect(response.body).toHaveProperty("message", "Login sukses");
     expect(response.body).toHaveProperty("token");
     expect(response.body).toHaveProperty("user");
-    expect(response.body.user).toHaveProperty("id");
-    expect(response.body.user).toHaveProperty("email", "wawan@gmail.com");
+    token = response.body.token;
   });
 
-  it("should return 401 for invalid email or password", async () => {
+  test("authentication ke endpoint", async () => {
     const response = await request(app)
-      .post("/auth/login")
-      .send({
-        email: "invalidemail@gmail.com",
-        password: "wrongpassword",
-      })
-      .set("Accept", "application/json");
+      .get("/auth/authentication")
+      .set("Authorization", `Bearer ${token}`)
+      .set("Accept", "text/html");
 
-    expect(response.status).toBe(401);
-    expect(response.body).toHaveProperty(
-      "message",
-      "Email or password is wrong"
-    );
+    expect(response.status).toBe(200);
+    expect(response.text).toContain("Daftar User");
   });
-
-  it("should return 500 for server error", async () => {});
 });

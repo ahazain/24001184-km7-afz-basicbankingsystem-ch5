@@ -1,6 +1,6 @@
 const request = require("supertest");
 const app = require("../index");
-//restart lagi dbnya kak dan restart id supaya passed:)
+
 describe("kegagalan get all user", () => {
   test("daftar user kosong", async () => {
     const response = await request(app).get("/api/v1/users");

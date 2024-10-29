@@ -3,17 +3,12 @@ const path = require("path");
 const express = require("express");
 const session = require("express-session");
 const flash = require("express-flash");
-const passport = require("passport");
-const morgan = require("morgan");
-const bodyParser = require("body-parser");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./swagger/swaggerConfig");
-
 const routesUser = require("./routes/routesUser");
 const routesAkun = require("./routes/routesAkun");
 const routesTransaksi = require("./routes/routesTransaksi");
 const routesAuth = require("./routes/routesAuth");
-
 const app = express();
 const port = config.port;
 
@@ -31,19 +26,14 @@ app.use(
     cookie: { secure: false },
   })
 );
-
-app.use(morgan("dev"));
 app.use(flash());
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   next();
 });
-
-// Swagger documentation route
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Routes
 app.use("/auth", routesAuth);
 app.use("/api/v1", routesUser);
 app.use("/api/v1", routesAkun);
