@@ -60,11 +60,11 @@ router.get("/register", authController.renderRegister);
  *               - profile
  *     responses:
  *       201:
- *         description: Berhasil mendaftarkan user baru
- *       400:
- *         description: Terjadi kesalahan pada input
+ *         description: Register sukses
  *       409:
  *         description: Email sudah terdaftar
+ *       500:
+ *         description: Terjadi kesalahan pada server
  */
 router.post("/register", authController.register);
 
@@ -106,7 +106,7 @@ router.get("/login", authController.renderLogin);
  *               - password
  *     responses:
  *       '200':
- *         description: Berhasil login dan mengembalikan token
+ *         description: Login sukses
  *         content:
  *           application/json:
  *             schema:
@@ -114,7 +114,7 @@ router.get("/login", authController.renderLogin);
  *               properties:
  *                 message:
  *                   type: string
- *                   example: "Login successful"
+ *                   example: "Login sukses"
  *                 token:
  *                   type: string
  *                   example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
@@ -129,7 +129,9 @@ router.get("/login", authController.renderLogin);
  *                       example: "32kopling@gmail.com"
  *
  *       '401':
- *         description: Email atau password salah
+ *         description: Email or password is wrong
+ *       '500':
+ *         description: Terjadi kesalahan pada server
  */
 router.post("/login", authController.login);
 

@@ -1,18 +1,3 @@
-// const jwt = require("jsonwebtoken");
-// function authenticateToken(req, res, next) {
-//   const authHeader = req.headers["authorization"];
-//   const token = authHeader && authHeader.split(" ")[1]; // Mengambil token dari header
-
-//   if (!token) return res.status(401).json({ message: "Akses ditolak" }); // Jika tidak ada token
-
-//   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-//     if (err) return res.status(403).json({ message: "Token tidak valid" }); // Jika token tidak valid
-//     req.user = user; // Simpan informasi user
-//     next(); // Lanjutkan ke rute berikutnya
-//   });
-// }
-
-// module.exports = authenticateToken;
 const jwt = require("jsonwebtoken");
 
 function authenticateToken(req, res, next) {
@@ -29,7 +14,7 @@ function authenticateToken(req, res, next) {
       console.log("Token tidak valid:", err);
       return res.redirect("/auth/login");
     }
-    req.user = user; // Simpan data user setelah verifikasi berhasil
+    req.user = user; 
     next();
   });
 }

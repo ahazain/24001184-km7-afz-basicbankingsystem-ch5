@@ -521,9 +521,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -696,17 +696,17 @@ const users = require("../controllers/usersControllers");
 //route user
 /**
  * @swagger
- * /users:
+ * /api/v1/users:
  *  get:
  *      summary: Menampilkan list semua user
  *      description: menampilkan semua list user yang ada
  *      tags:
  *       - Users
  *      responses:
- *          '201':
- *              description: sukses menampilkan semua list user
+ *          '200':
+ *              description: Berhasil menampilkan daftar user
  *          '409':
- *              description: Daftar akun tidak ada
+ *              description: Daftar Users tidak ada
  *          '500':
  *              description: Terjadi kesalahan pada server
  */
@@ -714,7 +714,7 @@ router.get("/users", users.showUsers);
 &nbsp;
 /**
  * @swagger
- * /users/{usersId}:
+ * /api/v1/users/{usersId}:
  *   get:
  *     summary: menampilkan user berdasarkan Id
  *     description: menampilkan secara detail user berdasarkan id dan profil user
@@ -729,7 +729,7 @@ router.get("/users", users.showUsers);
  *           type: integer
  *     responses:
  *       200:
- *         description: User retrieved successfully
+ *         description: berhasil menampilkan detail user
  *         content:
  *           application/json:
  *             schema:
@@ -754,15 +754,15 @@ router.get("/users", users.showUsers);
  *                       type: integer
  *                       example: 30
  *       404:
- *         description: User not found
+ *         description: Data Detail User tidak ada"
  *       500:
- *         description: Internal server error
+ *         description: Terjadi kesalahan pada server
  */
 router.get("/users/:usersId", users.showUsersId);
 &nbsp;
 /**
  * @swagger
- * /users:
+ * /api/v1/users:
  *   post:
  *     summary: Menambah data user baru
  *     description: Menambah data user baru dan profil
@@ -798,7 +798,7 @@ router.get("/users/:usersId", users.showUsersId);
  *                     example: "123 Main St, Springfield"
  *     responses:
  *       201:
- *         description: berhasil menambah user dan profil
+ *         description: Data user berhasil ditambahkan
  *         content:
  *           application/json:
  *             schema:
@@ -831,14 +831,16 @@ router.get("/users/:usersId", users.showUsersId);
  *                         address:
  *                           type: string
  *                           example: "123 Main St, Springfield"
+ *       400:
+ *         description:  Email sudah terdaftar
  *       500:
- *         description: gagal menambahkan user
+ *         description: Terjadi kesalahan pada server
  */
 router.post("/users", users.createUsers);
 &nbsp;
 /**
  * @swagger
- * /users/{usersId}:
+ * /api/v1/users/{usersId}:
  *   put:
  *     summary: Update data pengguna berdasarkan ID
  *     tags: [Users]
@@ -858,31 +860,27 @@ router.post("/users", users.createUsers);
  *             properties:
  *               name:
  *                 type: string
- *                 description: Nama pengguna
+ *                 example: "kopling"
  *               email:
  *                 type: string
- *                 description: Email pengguna
+ *                 example: "kopling@gmail.com"
  *               password:
  *                 type: string
- *                 description: Password pengguna
- *               identify_type:
- *                 type: string
- *                 description: Tipe identitas pengguna (misalnya KTP, SIM, dll.)
- *               identify_number:
- *                 type: string
- *                 description: Nomor identitas pengguna
- *               address:
- *                 type: string
- *                 description: Alamat pengguna
- *             example:
- *               name: "Nama Pengguna"
- *               email: "email@example.com"
- *               password: "password123"
- *               identify_type: "KTP"
- *               identify_number: "123456789"
- *               address: "Alamat lengkap pengguna"
+ *                 example: "123yuya"
+ *               profile:
+ *                 type: object
+ *                 properties:
+ *                   identify_type:
+ *                     type: string
+ *                     example: "KTP"
+ *                   identify_number:
+ *                     type: string
+ *                     example: "123456789"
+ *                   address:
+ *                     type: string
+ *                     example: "123 Main St, Springfield"
  *     responses:
- *       201:
+ *       '200':
  *         description: Data user berhasil diupdate
  *         content:
  *           application/json:
@@ -911,8 +909,10 @@ router.post("/users", users.createUsers);
  *                           type: string
  *                         address:
  *                           type: string
- *       409:
- *         description: Email sudah digunakan oleh pengguna lain
+ *       '404':
+ *         description: Data pengguna tidak ada untuk diupdate
+ *       '400':
+ *         description: Email sudah terdaftar
  *         content:
  *           application/json:
  *             schema:
@@ -936,7 +936,7 @@ router.put("/users/:usersId", users.updateUsers);
 &nbsp;
 /**
  * @swagger
- * /users/{usersId}:
+ * /api/v1/users/{usersId}:
  *   delete:
  *     summary: Hapus data pengguna berdasarkan ID
  *     tags: [Users]
@@ -949,7 +949,7 @@ router.put("/users/:usersId", users.updateUsers);
  *         description: ID dari pengguna
  *     responses:
  *       200:
- *         description: Data user berhasil dihapus
+ *         description: Data berhasil dihapus
  *         content:
  *           application/json:
  *             schema:
@@ -977,7 +977,7 @@ router.put("/users/:usersId", users.updateUsers);
  *                         address:
  *                           type: string
  *       404:
- *         description: Data user tidak ditemukan
+ *         description: Data user tidak tidak ada
  *         content:
  *           application/json:
  *             schema:
@@ -1009,7 +1009,7 @@ module.exports = router;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-28T02:06:57.161Z
+                at 2024-10-29T01:08:20.275Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

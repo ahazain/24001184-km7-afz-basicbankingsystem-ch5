@@ -7,20 +7,8 @@ const config = require("../configs/config");
 class AuthService {
   static async register(data) {
     const { name, email, password, profile } = data;
-
-    if (
-      !profile ||
-      !profile.identify_type ||
-      !profile.identify_number ||
-      !profile.address
-    ) {
-      const error = new Error("Profile information is incomplete.");
-      error.statusCode = 400;
-      throw error;
-    }
-
-    const existingUser = await usersModels.findUserByemail(email);
-    if (existingUser) {
+    const notUser = await usersModels.findUserByemail(email);
+    if (notUser) {
       const error = new Error("Email sudah terdaftar");
       error.statusCode = 409;
       throw error;
