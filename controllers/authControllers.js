@@ -1,4 +1,4 @@
-const AuthService = require("../services/authServis");
+  const AuthService = require("../services/authServis");
 const data = require("../models/usersModels");
 class AuthController {
   static renderRegister(req, res) {
