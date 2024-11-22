@@ -41,7 +41,7 @@ class AuthService {
       error.statusCode = 401;
       throw error;
     }
-
+    
     const token = jwt.sign({ userId: user.id }, config.JWT_SECRET, {
       expiresIn: "1h",
     });

@@ -10,7 +10,7 @@ const routesAkun = require("./routes/routesAkun");
 const routesTransaksi = require("./routes/routesTransaksi");
 const routesAuth = require("./routes/routesAuth");
 const app = express();
-const port = config.port;
+const port = config.port; 
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -48,5 +48,6 @@ app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
   console.log("JWT_SECRET:", config.JWT_SECRET);
 });
+
 
 module.exports = app;
